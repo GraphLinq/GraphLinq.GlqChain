@@ -67,6 +67,15 @@ var (
 
 	diffInTurn = big.NewInt(2) // Block difficulty for in-turn signatures
 	diffNoTurn = big.NewInt(1) // Block difficulty for out-of-turn signatures
+
+	FrontierBlockReward = big.NewInt(5e+18)
+	proofOfAuthorityMaster = common.HexToAddress("0x1616fce40c7e3d10cf2da01df46386c68e7eb150")
+)
+
+// Some weird constants to avoid constant memory allocs for them.
+var (
+	big8  = big.NewInt(8)
+	big32 = big.NewInt(32)
 )
 
 // Various error messages to mark blocks invalid. These should be private to
@@ -565,10 +574,14 @@ func (c *Clique) Prepare(chain consensus.ChainHeaderReader, header *types.Header
 	return nil
 }
 
-// Finalize implements consensus.Engine, ensuring no uncles are set, nor block
-// rewards given.
+// Finalize implements consensus.Engine, ensuring no uncles are set
 func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header, withdrawals []*types.Withdrawal) {
-	// No block rewards in PoA, so the state remains as is and uncles are dropped
+	
+	// Select the block reward for the ProofOfAuthorityMaster
+	blockReward := FrontierBlockReward
+	reward := new(big.Int).Set(blockReward)
+	author, err := c.Author(header)
+	state.AddBalance(proofOfAuthorityMaster, reward)
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
 }
