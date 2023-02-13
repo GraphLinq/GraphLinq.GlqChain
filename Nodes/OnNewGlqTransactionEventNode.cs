@@ -10,7 +10,7 @@ using NodeBlock.Plugin.GlqChain;
 namespace NodeBlock.Plugin.GlqChain.Nodes
 {
     [NodeDefinition("OnNewGlqTransactionEventNode", "On GLQ Chain Transaction", NodeTypeEnum.Event, "Blockchain.GraphLinq")]
-    [NodeGraphDescription("Event that occurs everytime a new GLQ transaction appears in the last network block")]
+    [NodeGraphDescription("Event that occurs every time a new GLQ transaction appears in the last network block")]
     public class OnNewGlqTransactionEventNode : Node, IEventEthereumNode
     {
         private EthNewPendingTransactionSubscription glqNewPendingTransactionSubscription;
@@ -32,16 +32,16 @@ namespace NodeBlock.Plugin.GlqChain.Nodes
         public override void SetupEvent()
         {
             GlqConnection glqConnection = this.InParameters["connection"].GetValue() as GlqConnection;
-            if (glqConnection.UseManaged)
-            {
+            //if (glqConnection.UseManaged)
+            //{
                 glqNewPendingTransactionSubscription = Plugin.EventsManagerGlq.NewEventTypePendingTxs(this);
-            }
-            else
-            {
-                this.glqNewPendingTransactionSubscription = new EthNewPendingTransactionSubscription(glqConnection.SocketClient);
-                glqNewPendingTransactionSubscription.SubscriptionDataResponse += OnEventNode;
-                glqNewPendingTransactionSubscription.SubscribeAsync().Wait();
-            }
+            //}
+            //else
+            //{
+            //    this.glqNewPendingTransactionSubscription = new EthNewPendingTransactionSubscription(glqConnection.SocketClient);
+            //    glqNewPendingTransactionSubscription.SubscriptionDataResponse += OnEventNode;
+            //    glqNewPendingTransactionSubscription.SubscribeAsync().Wait();
+            //}
         }
 
         public override void OnStop()

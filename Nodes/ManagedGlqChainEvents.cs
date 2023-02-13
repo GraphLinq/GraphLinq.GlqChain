@@ -50,7 +50,7 @@ namespace NodeBlock.Plugin.GlqChain.Nodes
 
                     try
                     {
-                        // Keep ping for infura
+                        // Keep ping for GLQ Chain
                         var handler = new EthBlockNumberObservableHandler(this.SocketClient);
                         handler.GetResponseAsObservable().Subscribe(x => { });
                         var delay = Task.Delay(TimeSpan.FromSeconds(30));

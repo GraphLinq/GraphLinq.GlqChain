@@ -11,7 +11,7 @@ using System.Text;
 namespace NodeBlock.Plugin.GlqChain.Nodes
 {
     [NodeDefinition("OnNewGlqBlockEventNode", "On GLQ Chain Block", NodeTypeEnum.Event, "Blockchain.GraphLinq")]
-    [NodeGraphDescription("Event that occurs everytime a new GLQ block is minted")]
+    [NodeGraphDescription("Event that occurs every time a new GLQ block is minted")]
     public class OnNewGlqBlockEventNode : Node, IEventEthereumNode
     {
         private EthNewBlockHeadersObservableSubscription blockHeadersSubscription;
@@ -24,7 +24,6 @@ namespace NodeBlock.Plugin.GlqChain.Nodes
             this.InParameters.Add("connection", new NodeParameter(this, "connection", typeof(string), true));
 
             this.OutParameters.Add("block", new NodeParameter(this, "block", typeof(Nethereum.RPC.Eth.DTOs.Block), true));
-
         }
 
         public override bool CanBeExecuted => false;
@@ -34,22 +33,22 @@ namespace NodeBlock.Plugin.GlqChain.Nodes
         public override void SetupEvent()
         {
             GlqConnection glqConnection = this.InParameters["connection"].GetValue() as GlqConnection;
-            if (glqConnection.UseManaged)
-            {
+            //if (glqConnection.UseManaged)
+            //{
                 blockHeadersSubscription = Plugin.EventsManagerGlq.NewEventTypePendingBlocks(this);
-            }
-            else
-            {
-                this.blockHeadersSubscription = new EthNewBlockHeadersObservableSubscription(glqConnection.SocketClient);
-                blockHeadersSubscription.GetSubscriptionDataResponsesAsObservable().Subscribe(async Block =>
-                {
-                    var instanciatedParameters = this.InstanciateParametersForCycle();
-                    instanciatedParameters["block"].SetValue(Block);
-
-                    this.Graph.AddCycle(this, instanciatedParameters);
-                });
-                blockHeadersSubscription.SubscribeAsync();
-            }
+            //}
+            //else
+            //{
+            //    this.blockHeadersSubscription = new EthNewBlockHeadersObservableSubscription(glqConnection.SocketClient);
+            //    blockHeadersSubscription.GetSubscriptionDataResponsesAsObservable().Subscribe(async Block =>
+            //    {
+            //        var instanciatedParameters = this.InstanciateParametersForCycle();
+            //        instanciatedParameters["block"].SetValue(Block);
+            //
+            //        this.Graph.AddCycle(this, instanciatedParameters);
+            //    });
+            //    blockHeadersSubscription.SubscribeAsync();
+            //}
 
         }
 

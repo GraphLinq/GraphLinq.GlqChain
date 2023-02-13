@@ -42,7 +42,7 @@ namespace NodeBlock.Plugin.GlqChain
 
         public override void Load()
         {
-            // ETH
+            // GLQ Chain
             WEB_3_API_URL_GLQ = Environment.GetEnvironmentVariable("glq_api_http_url");
             WEB_3_WS_URL_GLQ = Environment.GetEnvironmentVariable("glq_api_ws_url");
 
