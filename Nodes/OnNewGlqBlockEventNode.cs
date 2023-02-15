@@ -55,13 +55,13 @@ namespace NodeBlock.Plugin.GlqChain.Nodes
         public override void OnStop()
         {
             GlqConnection glqConnection = this.InParameters["connection"].GetValue() as GlqConnection;
-            if (glqConnection.UseManaged)
-            {
+            //if (glqConnection.UseManaged)
+            //{
                 string eventType = blockHeadersSubscription.GetType().ToString();
                 Plugin.EventsManagerGlq.RemoveEventNode(eventType, this);
                 return;
-            }
-            this.blockHeadersSubscription.UnsubscribeAsync().Wait();
+            //}
+            //this.blockHeadersSubscription.UnsubscribeAsync().Wait();
         }
 
         public override void BeginCycle()
